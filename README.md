@@ -38,6 +38,6 @@ $response->getStatusCode();
 $response->getHeaders(); 
 $response->getResult();
 ```
-```html
-<p style="color: blue;">For proxies you can add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2.</p>
-```
+
+#For proxies you can add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2.
+
