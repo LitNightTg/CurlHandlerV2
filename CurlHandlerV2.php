@@ -41,13 +41,11 @@ class CookieJar
     public function __construct($customFileName = null, string $cookieFile = null)
     {
         $this->cookieFile = $customFileName
-        ? __DIR__ . '/cookies/' . $customFileName
-        : ($cookieFile
-            ? $cookieFile
-            : __DIR__ . '/cookies/Handler' . uniqid('_Cookie', true) . '.txt');
-
-    $this->initializeCookieFile();
-}
+            ? __DIR__ . '/cookies/' . $customFileName
+            : $cookieFile ?? __DIR__ . '/cookies/Handler' . uniqid('_Cookie', true) . '.txt';
+    
+        $this->initializeCookieFile();
+    }
 
     private function initializeCookieFile(): void
     {
@@ -209,7 +207,7 @@ class CurlHandlerV2
         }
 
         curl_close($this->ch);
-        
+
         return new ResponseHandler(
             success: true,
             body: $this->body,
