@@ -8,33 +8,33 @@ To initialize a new instance of the `CurlHandlerV2` class, use the following cod
 
 ```php
 
-<code>#Initialize the curl session
-$CurlHandler = New CurlHandlerV2();</code>
+#Initialize the curl session
+$CurlHandler = New CurlHandlerV2();
 
-<code>#Use Cookies 
-$CurlHandler->SetCookiesHandler();</code> // you can name the file and the path
+#Use Cookies 
+$CurlHandler->SetCookiesHandler(); // you can name the file and the path
 
 #use Proxys 
-<code>$CurlHandler->ProxyHandler([ 
+$CurlHandler->ProxyHandler([ 
     "server" => "", #The server is necessary. 
     "auth" => "" #use auth if they are auth proxies 
-    ]); </code>
+    ]);
 
 #Use Method Get 
-<code>$response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random");</code> #add $headers if necessary 
-<code>$response->getResult();</code>
+$response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
+$response->getResult();
 
 #Use Method Post 
-<code>$response = $CurlHandler->Post("https://api.chucknorris.io/jokes/", [ "header: value" ], "query=cat"); 
-$response->getResult();</code>
+$response = $CurlHandler->Post("https://api.chucknorris.io/jokes/", [ "header: value" ], "query=cat"); 
+$response->getResult();
 
 #Use Method Custom 
-<code>$response = $CurlHandler->Custom("https://api.chucknorris.io/jokes/", "GET");</code>
+$response = $CurlHandler->Custom("https://api.chucknorris.io/jokes/", "GET");
 
 #For response values ​​use
 
-<code>$response->isSuccess(); 
+$response->isSuccess(); 
 $response->getStatusCode(); 
 $response->getHeaders(); 
-$response->getResult();</code>
+$response->getResult();
 ```
