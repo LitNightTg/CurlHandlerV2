@@ -39,6 +39,4 @@ $response->getHeaders();
 $response->getResult();
 ```
 
-```diff
-For proxies you can add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2
-```
+<p style="color: blue;">For proxies you can add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2.</p>
