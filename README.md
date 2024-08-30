@@ -54,7 +54,7 @@ $addressRandom = new AddressRandom();
 
 #To obtain data for each country use the following:
 
-$address = $addressRandom->GetDataRandom("us")
+$address = $addressRandom->GetDataRandom("us");
 $Longitude = $address->getLongitude();
 
 #This way you can access each data: 
