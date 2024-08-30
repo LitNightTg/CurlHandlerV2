@@ -1,4 +1,4 @@
-<b>$CurlHandler = New CurlHandlerV2(); //Initialize the curl session</b>
+<code>$CurlHandler = New CurlHandlerV2(); //Initialize the curl session</code>
 
 //Use Cookies
 $CurlHandler->SetCookiesHandler(); // you can name the file and the path
