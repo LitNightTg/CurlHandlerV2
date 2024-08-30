@@ -1,3 +1,13 @@
+# CurlHandlerV2 Usage Guide
+
+This guide will help you understand how to use the `CurlHandlerV2` class for various HTTP requests.
+
+## Initialize the Curl Session
+
+To initialize a new instance of the `CurlHandlerV2` class, use the following code:
+
+```php
+
 <code>#Initialize the curl session
 $CurlHandler = New CurlHandlerV2();</code>
 
@@ -27,3 +37,4 @@ $response->getResult();</code>
 $response->getStatusCode(); 
 $response->getHeaders(); 
 $response->getResult();</code>
+```
