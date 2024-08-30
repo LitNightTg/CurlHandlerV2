@@ -161,12 +161,10 @@ class CurlHandlerV2
 
     public function Post (string $url, array $headers = [], $Data)
     {
-        $this->CurlAddOpt([CURLOPT_URL => $url]);
-
-        $this->AddHeaderHandler($headers);
 
         $this->CurlAddOpt([
             CURLOPT_URL        => $url,
+            CURLOPT_POST       => 1,
             CURLOPT_POSTFIELDS => $this->TypeDataHandler($Data)
         ]);
 
@@ -179,9 +177,6 @@ class CurlHandlerV2
 
     public function Custom(string $url, $method = "GET", ?array $headers = [], string|array|null $data = null) 
     {
-
-        $this->CurlAddOpt([CURLOPT_URL => $url]);
-
         $this->CurlAddOpt([
             CURLOPT_URL           => $url,
             CURLOPT_CUSTOMREQUEST => $method,
@@ -200,6 +195,9 @@ class CurlHandlerV2
         $this->info = curl_getinfo($this->ch);
 
         if (!$this->body) {
+
+            curl_close($this->ch);
+
             $this->errorcode = curl_errno($this->ch);
             $this->errorString = curl_errno($this->ch);
 
@@ -209,6 +207,9 @@ class CurlHandlerV2
                 body: 'Error code: ' . $this->errorcode . 'Error Response: ' . $this->errorString
             );
         }
+
+        curl_close($this->ch);
+        
         return new ResponseHandler(
             success: true,
             body: $this->body,
