@@ -40,5 +40,5 @@ $response->getResult();
 ```
 
 ```diff
-For proxies you can add the value of `CURLOPT_PROXY => value` in the $oñtions of curlHandlerV2
+For proxies you can add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2
 ```
