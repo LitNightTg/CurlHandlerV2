@@ -39,3 +39,31 @@ $response->getHeaders();
 $response->getResult();
 ```
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
+
+# Get data address
+
+Get real addresses of 10 countries: (US) (FR) (DE) (UK) (CA) (PE) (AU) (MX) (ES) (IT)
+
+## Initialize the AddressRandom
+
+To initialize a new instance of the `AddressRandom` class, use the following code:
+
+```php
+
+$addressRandom = new AddressRandom(); 
+
+#To obtain data for each country use the following:
+
+$address = $addressRandom->GetDataRandom("us")
+$Longitude = $address->getLongitude();
+
+#This way you can access each data: 
+$Address = $address->getAddress();
+$City = $address->getCity();
+$Contry = $address->getCountry();
+$Latitude = $address->getLatitude();
+$province = $address->getProvince();
+$ProvinceCode = $address->getProvinceCode();
+$Zip = $address->getZip();
+```
+
