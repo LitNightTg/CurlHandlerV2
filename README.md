@@ -1,3 +1,4 @@
+
 # CurlHandlerV2 Usage Guide
 
 This guide will help you understand how to use the `CurlHandlerV2` class for various HTTP requests.
@@ -52,15 +53,15 @@ To initialize a new instance of the `AddressRandom` class, use the following cod
 
 #To obtain data for each country use the following:
 
-$Bulid = AddressRandom::build("us");
-$Build->Longitude();
+$Build = AddressRandom::build("us");
+$Zip = $Build->Zip;
 
 #This way you can access each data: 
-$Address = $Build->Address();
-$City = $Build->City();
-$Contry = $Build->Country();
-$Latitude = $Build->Latitude();
-$province = $Build->Province();
-$ProvinceCode = $Build->Provincecode();
-$Zip = $Build->Zip();
+$Address = $Build->Address;
+$City = $Build->City;
+$Contry = $Build->Country;
+$Latitude = $Build->Latitude;
+$province = $Build->Province;
+$ProvinceCode = $Build->Provincecode;
+$Zip = $Build->Zip;
 ```
