@@ -50,20 +50,17 @@ To initialize a new instance of the `AddressRandom` class, use the following cod
 
 ```php
 
-$addressRandom = new AddressRandom(); 
-
 #To obtain data for each country use the following:
 
-$address = $addressRandom->GetDataRandom("us");
-$Longitude = $address->getLongitude();
+$Bulid = AddressRandom::build("us");
+$Build->Longitude();
 
 #This way you can access each data: 
-$Address = $address->getAddress();
-$City = $address->getCity();
-$Contry = $address->getCountry();
-$Latitude = $address->getLatitude();
-$province = $address->getProvince();
-$ProvinceCode = $address->getProvinceCode();
-$Zip = $address->getZip();
+$Address = $Build->Address();
+$City = $Build->City();
+$Contry = $Build->Country();
+$Latitude = $Build->Latitude();
+$province = $Build->Province();
+$ProvinceCode = $Build->Provincecode();
+$Zip = $Build->Zip();
 ```
-
