@@ -62,6 +62,6 @@ $City = $Build->City;
 $Contry = $Build->Country;
 $Latitude = $Build->Latitude;
 $province = $Build->Province;
-$ProvinceCode = $Build->Provincecode;
+$ProvinceCode = $Build->ProvinceCode;
 $Zip = $Build->Zip;
 ```
