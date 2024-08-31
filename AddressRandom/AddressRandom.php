@@ -51,9 +51,8 @@ class AddressRandom {
     
     public function __get(string $name)
     {
-        $data = $this->GetDataRandom(); // Ensure data is loaded
+        $data = $this->GetDataRandom();
 
-        // Normalize property name to match the keys in the address data
         $propertyMap = [
             'Address' => 'address.address1',
             'City' => 'address.city',
