@@ -49,51 +49,31 @@ class AddressRandom {
         return $lineas ? json_decode($lineas[array_rand($lineas)], true) : null;
     }
     
-    public function Address(): ?string
+    public function __get(string $name)
     {
-        $data = $this->GetDataRandom();
-        return $data['address']['address1'] ?? null;
-    }
+        $data = $this->GetDataRandom(); // Ensure data is loaded
 
-    public function City(): ?string
-    {
-        $data = $this->GetDataRandom();
-        return $data['address']['city'] ?? null;
-    }
+        // Normalize property name to match the keys in the address data
+        $propertyMap = [
+            'Address' => 'address.address1',
+            'City' => 'address.city',
+            'Country' => 'address.country',
+            'Latitude' => 'address.latitude',
+            'Longitude' => 'address.longitude',
+            'Province' => 'address.province',
+            'ProvinceCode' => 'address.provinceCode',
+            'Zip' => 'address.zip'
+        ];
 
-    public function Country(): ?string
-    {
-        $data = $this->GetDataRandom();
-        return  $data['address']['country'] ?? null;
-    }
+        if (isset($propertyMap[$name])) {
+            $keys = explode('.', $propertyMap[$name]);
+            $value = $data;
+            foreach ($keys as $key) {
+                $value = $value[$key] ?? null;
+            }
+            return $value;
+        }
 
-    public function Latitude(): ?float
-    {
-        $data = $this->GetDataRandom();
-        return  $data['address']['latitude'] ?? null;
-    }
-
-    public function Longitude(): ?float
-    {
-        $data = $this->GetDataRandom();
-        return  $data['address']['longitude'] ?? null;
-    }
-
-    public function Province(): ?string
-    {
-        $data = $this->GetDataRandom();
-        return  $data['address']['province'] ?? null;
-    }
-
-    public function Provincecode(): ?string
-    {
-        $data = $this->GetDataRandom();
-        return  $data['address']['provinceCode'] ?? null;
-    }
-
-    public function Zip(): ?string
-    {
-        $data = $this->GetDataRandom();
-        return   $data['address']['zip'] ?? null;
+        return null;
     }
 }
