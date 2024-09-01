@@ -37,21 +37,22 @@ class ResponseHandler
 class CookieJar
 {
     private string $cookieFile;
+    private string $cookieDir;
 
-    public function __construct($customFileName = null, string $cookieFile = null)
+    public function __construct(?string $customFileName = null, ?string $cookieFile = null)
     {
+        $this->cookieDir = __DIR__ . '/cookies';
         $this->cookieFile = $customFileName
-            ? __DIR__ . '/cookies/' . $customFileName
-            : $cookieFile ?? __DIR__ . '/cookies/Handler' . uniqid('_Cookie', true) . '.txt';
+            ? $this->cookieDir . '/' . $customFileName
+            : $cookieFile ?? $this->cookieDir . '/Handler' . uniqid('_Cookie', true) . '.txt';
     
         $this->initializeCookieFile();
     }
 
     private function initializeCookieFile(): void
     {
-        $rutaCookies = __DIR__ . '/cookies';
-        if (!is_dir($rutaCookies)) {
-            mkdir($rutaCookies, 0777, true);
+        if (!is_dir($this->cookieDir)) {
+            mkdir($this->cookieDir, 0777, true);
         }
 
         if (!file_exists($this->cookieFile)) {
@@ -64,6 +65,25 @@ class CookieJar
     {
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookieFile);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookieFile);
+    }
+
+    public function getCookieFile(): string
+    {
+        return $this->cookieFile;
+    }
+
+    public function clearCookies(): void
+    {
+        if (file_exists($this->cookieFile)) {
+            file_put_contents($this->cookieFile, '');
+        }
+    }
+
+    public function deleteCookieFile(): void
+    {
+        if (file_exists($this->cookieFile)) {
+            unlink($this->cookieFile);
+        }
     }
 }
 
@@ -91,14 +111,22 @@ class CurlHandlerV2
         $this->CurlAddOpt($this->options);
     }
 
-    public function SetCookiesHandler($customFileName = null, $rutaCookies = null): void
+    public function SetCookiesHanlder(?string $customFileName = null, string $rutaCookies = null): void 
     {
-        if ($this->ch === null) {
-            throw new RuntimeException('El manejador cURL no ha sido inicializado.');
+        if($this->ch === null) {
+            throw new RuntimeException('El manejador de cookies no ha sido inicializado.');
         }
 
-        $cookieJar = new CookieJar($customFileName, $rutaCookies);
-        $cookieJar->configureCurlOptions($this->ch);
+        try {
+            $customFileName = $customFileName ? trim($customFileName) : null;
+            $rutaCookies = $rutaCookies ? trim($rutaCookies) : null;
+            
+            $cookieJar = new CookieJar($customFileName, $rutaCookies);
+            $cookieJar->configureCurlOptions($this->ch);
+        } catch (Exception $e) {
+            throw new RuntimeException('Error al configurar los manejadores de cookies.');
+        }
+
     }
 
     public function AddHeaderHandler(array $header): void
@@ -218,25 +246,27 @@ class CurlHandlerV2
         );
     }
 
-    public function HeadersParseHandler(string $raw): array
+    public function headersParseHandler(string $raw): array
     {
         if (empty($raw)) {
             return [];
         }
-
+    
         $lines = preg_split('/\r\n/', $raw, -1, PREG_SPLIT_NO_EMPTY);
         $headers = [];
-
+        $scheme = '';
+    
         foreach ($lines as $index => $line) {
             if ($index === 0) {
                 $scheme = $line;
-            } elseif (strpos($line, ':') !== false) {
-                [$key, $value] = explode(':', $line, 2);
-                $key = trim($key);
-                $value = trim($value);
-                $headers[$key] = isset($headers[$key]) ? $headers[$key] . ',' . $value : $value;
+            } elseif (str_contains($line, ':')) {
+                [$key, $value] = array_map('trim', explode(':', $line, 2));
+                $headers[$key] = $headers[$key] ?? '';
+                $headers[$key] .= ($headers[$key] ? ',' : '') . $value;
             }
         }
-        return array_merge(['scheme' => $scheme ?? ''], $headers);
+    
+        return ['scheme' => $scheme] + $headers;
     }
 }
+    
