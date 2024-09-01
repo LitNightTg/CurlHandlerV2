@@ -111,7 +111,7 @@ class CurlHandlerV2
         $this->CurlAddOpt($this->options);
     }
 
-    public function SetCookiesHanlder(?string $customFileName = null, string $rutaCookies = null): void 
+    public function SetCookiesHandler(?string $customFileName = null, string $rutaCookies = null): void 
     {
         if($this->ch === null) {
             throw new RuntimeException('El manejador de cookies no ha sido inicializado.');
