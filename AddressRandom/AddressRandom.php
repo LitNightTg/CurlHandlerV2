@@ -28,30 +28,31 @@ class AddressRandom {
 
     private function codeCountry(): string 
     {
-        $fileNameBase = $this->countryMap[$this->countryCode] ?? null;
-        return $fileNameBase . '.txt';
+        return ($this->countryMap[$this->countryCode] ?? throw new InvalidArgumentException("Invalid country code: $this->countryCode")) . '.txt';
     }
 
     private function setCountryCode(string $countryCode): void
     {
-        $countryCode = strtoupper($countryCode);
-
-        if (array_key_exists($countryCode, $this->countryMap)) {
-            $this->countryCode = $countryCode;
-        } else {
+        $this->countryCode = strtoupper($countryCode);
+        if (!array_key_exists($this->countryCode, $this->countryMap)) {
             throw new InvalidArgumentException("Invalid country code: $countryCode");
         }
     }
 
-    private function GetDataRandom(): ?array
+    private function getDataRandom(): ?array
     {
-        $lineas = @file(__DIR__ . '/Address/' . $this->codeCountry(), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        return $lineas ? json_decode($lineas[array_rand($lineas)], true) : null;
+        $filePath = __DIR__ . '/Address/' . $this->codeCountry();
+        if (!file_exists($filePath)) {
+            throw new RuntimeException("File not found: $filePath");
+        }
+
+        $lineas = @file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: throw new RuntimeException("Failed to read file: $filePath");
+        return json_decode($lineas[array_rand($lineas)], true);
     }
     
     public function __get(string $name)
     {
-        $data = $this->GetDataRandom();
+        $data = $this->getDataRandom();
 
         $propertyMap = [
             'Address' => 'address.address1',
@@ -64,15 +65,6 @@ class AddressRandom {
             'Zip' => 'address.zip'
         ];
 
-        if (isset($propertyMap[$name])) {
-            $keys = explode('.', $propertyMap[$name]);
-            $value = $data;
-            foreach ($keys as $key) {
-                $value = $value[$key] ?? null;
-            }
-            return $value;
-        }
-
-        return null;
+        return array_reduce(explode('.', $propertyMap[$name] ?? ''), fn($carry, $key) => $carry[$key] ?? null, $data);
     }
 }
