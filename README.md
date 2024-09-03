@@ -64,7 +64,7 @@ $Latitude = $Build->Latitude;
 $province = $Build->Province;
 $ProvinceCode = $Build->ProvinceCode;
 $Zip = $Build->Zip;
-$FirstName = $addressRandom->FirstName; 
-$LastName = $addressRandom->LastName;
-$Email = $addressRandom->Email;
+$FirstName = $Build->FirstName; 
+$LastName = $Build->LastName;
+$Email = $Build->Email;
 ```
