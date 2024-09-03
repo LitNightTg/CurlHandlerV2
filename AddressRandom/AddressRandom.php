@@ -40,14 +40,17 @@ class AddressRandom {
         return new self($countryCode);
     }
 
+    private function getFilePath(string $filename): string
+    {
+        return file_exists($filePath = __DIR__ . self::NAME_DIRECTORY . $filename) ? $filePath : throw new RuntimeException("File not found: $filePath");
+
+    }
+
     private function readFileData(string $filename = null, bool $random = false): array
     {
-        $filename = $filename ?? $this->codeCountry();
-    
-        $filePath = __DIR__ . self::NAME_DIRECTORY . $filename;
-        if (!file_exists($filePath)) {
-            throw new RuntimeException("File not found: $filePath");
-        }
+       $filename = $filename ?? $this->codeCountry();
+       $filePath = $this->getFilePath($filename);
+
         $lines = @file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: throw new RuntimeException("Failed to read file: $filePath");
         
         return $random ? json_decode($lines[array_rand($lines)], true) ?? throw new RuntimeException("Failed to decode JSON from file: $filePath") : $lines;
