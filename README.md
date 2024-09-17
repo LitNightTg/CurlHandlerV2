@@ -37,9 +37,9 @@ $response->body;
 #example for using proxies
 $proxy = [
     "proxy" => "",
-   "auth" => ""
+    "auth" => ""
 ];
-$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $cookie, $server);
+$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $proxy);
 
 ```
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
