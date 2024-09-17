@@ -35,6 +35,12 @@ class CurlHandlerV2
         $this->ch = curl_init($url);
         $this->CurlAddOpt($this->options);
     }
+    
+    private function dataType(mixed $data): string|false
+    {
+        return is_string($data) ? $data : (is_array($data) || is_object($data) ? json_encode($data) :
+        false);
+    }
 
     private function SetCookiesHandler(): void 
     {
@@ -105,7 +111,7 @@ class CurlHandlerV2
         }
 
         $this->CurlAddOpt([
-            CURLOPT_POSTFIELDS => $Data
+            CURLOPT_POSTFIELDS => $this->dataType($Data)
         ]);
         
         $this->SetCookiesHandler();
@@ -121,14 +127,15 @@ class CurlHandlerV2
 
         $this->CurlAddOpt([
             CURLOPT_CUSTOMREQUEST => $custom,
-            CURLOPT_POSTFIELDS => $Data
+            CURLOPT_POSTFIELDS => $this->dataType($Data)
         ]);
         
         $this->SetCookiesHandler();
         return $this->GetResponseHandler();
     }
 
-    private function GetResponseHandler(){
+    private function GetResponseHandler(): object
+    {
         $this->body = curl_exec($this->ch);
         $this->info = curl_getinfo($this->ch);
 
