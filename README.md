@@ -13,7 +13,7 @@ To initialize a new instance of the `CurlHandlerV2` class, use the following cod
 $CurlHandler = New CurlHandlerV2();
 
 #Use Cookies 
-$CurlHandler->CookieHandler();; // you can name the file
+$CurlHandler->CookieHandler(); // you can name the file
 
 #use Proxys 
 $CurlHandler->ProxyHandler([ 
@@ -23,21 +23,22 @@ $CurlHandler->ProxyHandler([
 
 #Use Method Get 
 $response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
-$response->getResult();
+$response->body;
 
 #Use Method Post 
 $response = $CurlHandler->Post("https://api.chucknorris.io/jokes/", [ "header: value" ], "query=cat"); 
-$response->getResult();
+$response->body;
 
 #Use Method Custom 
 $response = $CurlHandler->Custom("https://api.chucknorris.io/jokes/", "GET");
+$response->body;
 
 #For response values ​​use
 
-$response->isSuccess(); 
-$response->getStatusCode(); 
-$response->getHeaders(); 
-$response->getResult();
+$response->success; 
+$response->statusCode; 
+$response->headers; 
+$response->body;
 ```
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
 
