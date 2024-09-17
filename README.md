@@ -16,7 +16,7 @@ $CurlHandler = New CurlHandlerV2();
 $CurlHandler->CookieHandler(); // you can name the file
 
 #Use Method Get 
-$response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
+$response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random", [ "header: value" ]); #add $headers if necessary 
 $response->body;
 
 #Use Method Post 
@@ -24,7 +24,7 @@ $response = $CurlHandler->Post("https://api.chucknorris.io/jokes/", [ "header: v
 $response->body;
 
 #Use Method Custom 
-$response = $CurlHandler->Custom("https://api.chucknorris.io/jokes/", "GET");
+$response = $CurlHandler->Custom("https://api.chucknorris.io/jokes/", "GET", [ "header: value" ]);
 $response->body;
 
 #For response values ​​use
@@ -39,7 +39,7 @@ $proxy = [
     "proxy" => "",
     "auth" => "", #Use this option if your proxies use username and password
 ];
-$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $proxy);
+$example = $CurlHandler->Get("http://httpbin.org/get", [ "header: value" ], $proxy);
 
 ```
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
