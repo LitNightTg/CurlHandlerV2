@@ -15,13 +15,6 @@ $CurlHandler = New CurlHandlerV2();
 #Use Cookies 
 $CurlHandler->CookieHandler(); // you can name the file
 
-#use Proxys 
-$proxy = [
-    "proxy" => "",
-"auth" => ""
-];
-$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $cookie, $server);
-
 #Use Method Get 
 $response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
 $response->body;
@@ -40,6 +33,14 @@ $response->success;
 $response->statusCode; 
 $response->headers; 
 $response->body;
+
+#example for using proxies
+$proxy = [
+    "proxy" => "",
+   "auth" => ""
+];
+$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $cookie, $server);
+
 ```
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
 
