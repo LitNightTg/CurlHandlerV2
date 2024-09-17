@@ -16,8 +16,6 @@ class CurlHandlerV2
     private $ch;
     private bool|string $body;
     private array|false $info;
-    private int $errorcode;
-    private string $errorString;
     private CookieJar $cookieJar;  
     private $cookieFile;
 
@@ -134,38 +132,24 @@ class CurlHandlerV2
         return $this->GetResponseHandler();
     }
 
-    private function GetResponseHandler(): object
+    private function GetResponseHandler(): stdClass
     {
+        $response = new stdClass();
         $this->body = curl_exec($this->ch);
         $this->info = curl_getinfo($this->ch);
-
-        if (!$this->body) {
-
-            curl_close($this->ch);
-
-            $this->errorcode = curl_errno($this->ch);
-            $this->errorString = curl_errno($this->ch);
-
-            return new ResponseHandler(
-                success: false,
-                statusCode: $this->info['http_code'],
-                body: 'Error code: ' . $this->errorcode . 'Error Response: ' . $this->errorString
-            );
-        }
-
-        $headerSize = $this->info['header_size'];
-        $header = substr($this->body, 0, $headerSize);
-
-        return new ResponseHandler(
-            success: true,
-            body: $this->body,
-            statusCode: $this->info['http_code'],
-            headers: [
-                'request_header' => $this->headersParseHandler($this->info['request_header'] ?? ''),
-                'response_header' => $this->headersParseHandler($header)
-            ],
-        );
-    }
+    
+        $response->success = !empty($this->body);
+        $response->statusCode = $this->info['http_code'] ?? 0;
+        $response->body = $response->success
+            ? $this->body
+            : 'Error code: ' . curl_errno($this->ch) . ' Error Response: ' . curl_error($this->ch);
+        $response->headers = $response->success
+            ? $this->headersParseHandler($this->info['request_header'] ?? '') + $this->headersParseHandler(substr($this->body, 0, $this->info['header_size']))
+            : [];
+    
+        curl_close($this->ch);
+        return $response;
+    }    
     
     public function headersParseHandler(string $rawHeaders): array
     {
@@ -184,37 +168,6 @@ class CurlHandlerV2
         return $headers;
     }
 }
-
-class ResponseHandler
-{
-    public function __construct(
-        private readonly bool $success = false,
-        private readonly int $statusCode = 200,
-        private readonly array $headers = [],
-        private readonly ?string $body = null,
-    ) {}
-    public function isSuccess(): bool
-    {
-        return $this->success;
-    }
-
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
-    public function getResult(): ?string
-    {
-        return $this->body;
-    }
-
-}
-
 class CookieJar
 {
     private string $cookieDir;
