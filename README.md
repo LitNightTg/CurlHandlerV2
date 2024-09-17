@@ -37,7 +37,7 @@ $response->body;
 #example for using proxies
 $proxy = [
     "proxy" => "",
-    "auth" => ""
+    "auth" => "", #Use this option if your proxies use username and password
 ];
 $example = $CurlHandler->Get("http://httpbin.org/get", $headers, $proxy);
 
