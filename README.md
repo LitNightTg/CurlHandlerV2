@@ -16,10 +16,10 @@ $CurlHandler = New CurlHandlerV2();
 $CurlHandler->CookieHandler(); // you can name the file
 
 #use Proxys 
-$CurlHandler->ProxyHandler([ 
-    "proxy" => "", #The proxy is necessary. 
-    "auth" => "" #use auth if they are auth proxies 
-    ]);
+$proxy = [
+    "proxy" => "",
+     "auth" => ""
+];
 
 #Use Method Get 
 $response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
