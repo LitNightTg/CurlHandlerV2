@@ -72,7 +72,7 @@ class CurlHandlerV2
         return $captured !== null ? ($decodeBase64 ? base64_decode($captured) : $captured) : null;
     }
 
-    public function ProxyHandler(array $data): void
+    private function ProxyHandler(array $data): void
     {
         if (!isset($data['proxy']) || empty($data['proxy'])) {
             throw new InvalidArgumentException('El campo "proxy" es obligatorio.');
@@ -89,8 +89,9 @@ class CurlHandlerV2
         $this->CurlAddOpt($proxyOptions);
     }
 
-    public function Get(string $url, ?array $headers=null){
+    public function Get(string $url, ?array $headers=null, $proxy = null){
         $this->CreateHandler($url);
+        $this->ProxyHandler($proxy);
 
         if (is_array($headers)) {
             $this->AddHeaderHandler($headers);
@@ -101,8 +102,9 @@ class CurlHandlerV2
         return $this->GetResponseHandler();
     }
 
-    public function Post(string $url, ?array $headers=null, ?string $Data = null){
+    public function Post(string $url, ?array $headers=null, ?string $Data = null, $proxy = null){
         $this->CreateHandler($url);
+        $this->ProxyHandler($proxy);
 
         if (is_array($headers)) {
             $this->AddHeaderHandler($headers);
@@ -117,8 +119,10 @@ class CurlHandlerV2
         return $this->GetResponseHandler();
     }
 
-    public function Custom(string $url, $custom = "GET",?array $headers=null, ?string $Data = null){
+    public function Custom(string $url, $custom = "GET",?array $headers=null, ?string $Data = null, $proxy = null ){
         $this->CreateHandler($url);
+        $this->ProxyHandler($proxy);
+        
         if (is_array($headers)) {
             $this->AddHeaderHandler($headers);
         }
