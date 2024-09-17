@@ -13,7 +13,7 @@ To initialize a new instance of the `CurlHandlerV2` class, use the following cod
 $CurlHandler = New CurlHandlerV2();
 
 #Use Cookies 
-$CurlHandler->CookieHandler();; // you can name the file and the path
+$CurlHandler->CookieHandler();; // you can name the file
 
 #use Proxys 
 $CurlHandler->ProxyHandler([ 
