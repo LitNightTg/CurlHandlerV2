@@ -91,11 +91,10 @@ class CurlHandlerV2
 
     public function Get(string $url, ?array $headers=null, $proxy = null){
         $this->CreateHandler($url);
-        $this->ProxyHandler($proxy);
+        
+        is_array($proxy) ? $this->ProxyHandler($proxy) : null;
 
-        if (is_array($headers)) {
-            $this->AddHeaderHandler($headers);
-        }
+        is_array($headers) ? $this->AddHeaderHandler($headers) : null;
 
         $this->SetCookiesHandler();
 
@@ -104,11 +103,10 @@ class CurlHandlerV2
 
     public function Post(string $url, ?array $headers=null, ?string $Data = null, $proxy = null){
         $this->CreateHandler($url);
-        $this->ProxyHandler($proxy);
 
-        if (is_array($headers)) {
-            $this->AddHeaderHandler($headers);
-        }
+        is_array($proxy) ? $this->ProxyHandler($proxy) : null;
+
+        is_array($headers) ? $this->AddHeaderHandler($headers) : null;
 
         $this->CurlAddOpt([
             CURLOPT_POSTFIELDS => $this->dataType($Data)
@@ -121,11 +119,10 @@ class CurlHandlerV2
 
     public function Custom(string $url, $custom = "GET",?array $headers=null, ?string $Data = null, $proxy = null ){
         $this->CreateHandler($url);
-        $this->ProxyHandler($proxy);
         
-        if (is_array($headers)) {
-            $this->AddHeaderHandler($headers);
-        }
+        is_array($proxy) ? $this->ProxyHandler($proxy) : null;
+
+        is_array($headers) ? $this->AddHeaderHandler($headers) : null;
 
         $this->CurlAddOpt([
             CURLOPT_CUSTOMREQUEST => $custom,
