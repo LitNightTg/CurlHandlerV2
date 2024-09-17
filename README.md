@@ -18,8 +18,9 @@ $CurlHandler->CookieHandler(); // you can name the file
 #use Proxys 
 $proxy = [
     "proxy" => "",
-     "auth" => ""
+"auth" => ""
 ];
+$example = $CurlHandler->Get("http://httpbin.org/get", $headers, $cookie, $server);
 
 #Use Method Get 
 $response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random"); #add $headers if necessary 
