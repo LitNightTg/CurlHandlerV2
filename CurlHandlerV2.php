@@ -1,21 +1,8 @@
 <?php
 
-namespace Yotsuba\Bot\Private\Utils\Curls;
-
-use Exception;
-use InvalidArgumentException;
-use RuntimeException;
-
-
-ignore_user_abort(true);
-set_time_limit(0);
-error_reporting(0);
-
 class CurlHandlerV2 
 {
     private array $options = [
-        CURLOPT_PROXYTYPE => CURLPROXY_HTTP,
-        CURLOPT_PROXY => "http://70cd8dcd46913fc73b3d:4f6c9a851b4deccf@gw.dataimpulse.com:823",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HEADER         => false,
         CURLINFO_HEADER_OUT    => true,
@@ -77,7 +64,6 @@ class CurlHandlerV2
         curl_setopt_array($this->ch, $option);
     }
 
-
     public function capture(string $string, string $start, string $end, bool $decodeBase64 = false): ?string
     {
         $parts = explode($start, $string, 2);
@@ -85,9 +71,9 @@ class CurlHandlerV2
         return $captured !== null ? ($decodeBase64 ? base64_decode($captured) : $captured) : null;
     }
 
-    private function ProxyHandler(array $data): void
+    private function handleProxyOptions(array $data): array
     {
-        if (!isset($data['proxy']) || empty($data['proxy'])) {
+        if (empty($data['proxy'])) {
             throw new InvalidArgumentException('El campo "proxy" es obligatorio.');
         }
 
@@ -95,13 +81,25 @@ class CurlHandlerV2
             CURLOPT_PROXY => $data['proxy']
         ];
 
-        if (isset($data['auth']) && !empty($data['auth'])) {
+        if (!empty($data['auth'])) {
             $proxyOptions[CURLOPT_USERPWD] = $data['auth'];
         }
-
+    
+        return $proxyOptions;
+    }
+    
+    private function ProxyHandler(array $data): void
+    {
+        $proxyOptions = $this->handleProxyOptions($data);
         $this->CurlAddOpt($proxyOptions);
     }
-
+    
+    public function ProxySession(array $data): void
+    {
+        $proxyOptions = $this->handleProxyOptions($data);
+        $this->options = array_replace($this->options, $proxyOptions);
+    }
+    
     public function Get(string $url, ?array $headers=null, $proxy = null){
         $this->CreateHandler($url);
         
@@ -146,9 +144,9 @@ class CurlHandlerV2
         return $this->GetResponseHandler();
     }
 
-    private function GetResponseHandler(): \stdClass
+    private function GetResponseHandler(): stdClass
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->body = $this->body = curl_exec($this->ch);
         $this->info = curl_getinfo($this->ch);
     
