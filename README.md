@@ -33,15 +33,28 @@ $response->success;
 $response->statusCode; 
 $response->headers; 
 $response->body;
-
-#example for using proxies
-$proxy = [
-    "proxy" => "",
-    "auth" => "", #Use this option if your proxies use username and password
-];
-$example = $CurlHandler->Get("http://httpbin.org/get", [ "header: value" ], $proxy);
-
 ```
+
+## Example for using proxies
+
+There are two ways to use proxies, and in all of them you must always include the value `proxy`
+
+```php
+$server = [
+    "proxy" => "",
+    "auth"  => "",
+];
+$example = $CurlHandlerV2->Get("http://httpbin.org/get", null, $server)->body;
+```
+
+```php
+$CurlHandlerV2->ProxySession([
+    "proxy" => "value",
+    "auth"  => "value"
+]);
+$example = $CurlHandlerV2->Get("http://httpbin.org/get")->body;
+```
+
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
 
 # Get data address
