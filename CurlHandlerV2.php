@@ -1,8 +1,21 @@
 <?php
 
+namespace Yotsuba\Bot\Private\Utils\Curls;
+
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
+
+
+ignore_user_abort(true);
+set_time_limit(0);
+error_reporting(0);
+
 class CurlHandlerV2 
 {
     private array $options = [
+        CURLOPT_PROXYTYPE => CURLPROXY_HTTP,
+        CURLOPT_PROXY => "http://70cd8dcd46913fc73b3d:4f6c9a851b4deccf@gw.dataimpulse.com:823",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HEADER         => false,
         CURLINFO_HEADER_OUT    => true,
@@ -133,24 +146,24 @@ class CurlHandlerV2
         return $this->GetResponseHandler();
     }
 
-    private function GetResponseHandler(): stdClass
+    private function GetResponseHandler(): \stdClass
     {
-        $response = new stdClass();
-        $this->body = curl_exec($this->ch);
+        $response = new \stdClass();
+        $response->body = $this->body = curl_exec($this->ch);
         $this->info = curl_getinfo($this->ch);
     
-        $response->success = !empty($this->body);
+        $response->success = !empty($response->body);
         $response->statusCode = $this->info['http_code'] ?? 0;
         $response->body = $response->success
-            ? $this->body
+            ? $response->body
             : 'Error code: ' . curl_errno($this->ch) . ' Error Response: ' . curl_error($this->ch);
         $response->headers = $response->success
-            ? $this->headersParseHandler($this->info['request_header'] ?? '') + $this->headersParseHandler(substr($this->body, 0, $this->info['header_size']))
+            ? $this->headersParseHandler(($this->info['request_header'] ?? '') . substr($response->body, 0, $this->info['header_size']))
             : [];
     
         curl_close($this->ch);
         return $response;
-    }    
+    }
     
     public function headersParseHandler(string $rawHeaders): array
     {
