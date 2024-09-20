@@ -12,9 +12,6 @@ To initialize a new instance of the `CurlHandlerV2` class, use the following cod
 #Initialize the curl session
 $CurlHandler = New CurlHandlerV2();
 
-#Use Cookies 
-$CurlHandler->CookieHandler(); // you can name the file
-
 #Use Method Get 
 $response = $CurlHandler->Get("https://api.chucknorris.io/jokes/random", [ "header: value" ]); #add $headers if necessary 
 $response->body;
@@ -53,6 +50,18 @@ $CurlHandlerV2->ProxySession([
     "auth"  => "value"
 ]);
 $example = $CurlHandlerV2->Get("http://httpbin.org/get")->body;
+```
+
+## Initialize the cookie session
+
+For cookies we will only use the CookieHandler function, we can assign a name to the cookie file or we can leave it with the name that is created by default
+
+```php
+# no name (will use a created one):
+$CurlHandlerV2->CookieHandler();
+
+# with the name that we want to give it:
+$CurlHandlerV2->CookieHandler("cookies.txt");
 ```
 
 **For proxies you can also add the value of `CURLOPT_PROXY => value` in the $options of curlHandlerV2, it's your decision!**
