@@ -41,8 +41,8 @@ There are two ways to use proxies, and in all of them you must always include th
 
 ```php
 $server = [
-    "proxy" => "",
-    "auth"  => "",
+    "proxy" => "value",
+    "auth"  => "value",
 ];
 $example = $CurlHandlerV2->Get("http://httpbin.org/get", null, $server)->body;
 ```
