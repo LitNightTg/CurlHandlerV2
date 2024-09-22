@@ -29,17 +29,6 @@ class CurlHandlerV2
         $this->cookieFile = $this->cookieJar->createCookieFile($customFileName);
     }
 
-    private function CreateHandler(string $url){
-        $this->ch = curl_init($url);
-        $this->CurlAddOpt($this->options);
-    }
-    
-    private function dataType(mixed $data): string|false
-    {
-        return is_string($data) ? $data : (is_array($data) || is_object($data) ? json_encode($data) :
-        false);
-    }
-
     private function SetCookiesHandler(): void 
     {
         try {
@@ -52,16 +41,37 @@ class CurlHandlerV2
         }
     }
 
-    private function AddHeaderHandler(array $header): void
-    {
-        $this->CurlAddOpt([
-            CURLOPT_HTTPHEADER => $header
-        ]);
+    public function deleteCookieFile() : void {
+        $this->cookieJar->deleteCookieFile();
     }
 
-    public function CurlAddOpt(array $option): void
+    public function clearCookies() : void{
+        $this->cookieJar->clearCookies();
+    }
+
+    private function AddHeaderHandler(array $header): void
+    {
+        $this->CurlAddOpt([CURLOPT_HTTPHEADER => $header]);
+    }
+
+    private function CreateHandler(string $url){
+        $this->ch = curl_init($url);
+        $this->CurlAddOpt($this->options);
+    }
+    
+    private function dataType(mixed $data): string|false
+    {
+        return is_string($data) ? $data : (is_array($data) || is_object($data) ? json_encode($data) :
+        false);
+    }
+
+    private function CurlAddOpt(array $option): void
     {
         curl_setopt_array($this->ch, $option);
+    }
+
+    public function CurlSetOptions(array $optionsNew){
+        $this->options =  array_replace($this->options, $optionsNew);
     }
 
     public function capture(string $string, string $start, string $end, bool $decodeBase64 = false): ?string
@@ -73,17 +83,13 @@ class CurlHandlerV2
 
     private function handleProxyOptions(array $data): array
     {
-        if (empty($data['proxy'])) {
-            throw new InvalidArgumentException('El campo "proxy" es obligatorio.');
-        }
+        
+        empty($data['proxy']) ? throw new InvalidArgumentException('El campo "proxy" es obligatorio.') : null;
 
         $proxyOptions = [
-            CURLOPT_PROXY => $data['proxy']
+            CURLOPT_PROXY => $data['proxy'],
+            CURLOPT_USERPWD => $data['auth'] ?? null
         ];
-
-        if (!empty($data['auth'])) {
-            $proxyOptions[CURLOPT_USERPWD] = $data['auth'];
-        }
     
         return $proxyOptions;
     }
